@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35312.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gestao", "Gestao\Gestao.csproj", "{8552DBC6-10B4-46CA-8F9D-C5CBA45570E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gestao.Client", "Gestao.Client\Gestao.Client.csproj", "{FC6B74E6-970A-4564-8692-0E89B99F0164}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8552DBC6-10B4-46CA-8F9D-C5CBA45570E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8552DBC6-10B4-46CA-8F9D-C5CBA45570E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8552DBC6-10B4-46CA-8F9D-C5CBA45570E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8552DBC6-10B4-46CA-8F9D-C5CBA45570E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC6B74E6-970A-4564-8692-0E89B99F0164}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC6B74E6-970A-4564-8692-0E89B99F0164}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC6B74E6-970A-4564-8692-0E89B99F0164}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC6B74E6-970A-4564-8692-0E89B99F0164}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D4E89024-4048-46CC-AE08-685197BCD861}
+	EndGlobalSection
+EndGlobal
