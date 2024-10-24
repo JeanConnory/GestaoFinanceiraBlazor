@@ -1,10 +1,13 @@
-using Gestao.Client.Pages;
 using Gestao.Components;
 using Gestao.Components.Account;
 using Gestao.Data;
+using Gestao.Domain.Enums;
+using Gestao.Domain.Repositories;
 using Gestao.Libraries.Mail;
+using Gestao.Repositories;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Net.Mail;
@@ -20,6 +23,8 @@ builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, PersistingRevalidatingAuthenticationStateProvider>();
+
+#region Config of Authentication
 
 builder.Services.AddAuthentication(options =>
     {
@@ -43,6 +48,10 @@ builder.Services.AddAuthentication(options =>
     })
     .AddIdentityCookies();
 
+#endregion
+
+#region Config of Database & Authentication
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
@@ -52,6 +61,10 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddSignInManager()
     .AddDefaultTokenProviders();
+
+#endregion
+
+#region Dependency Injection
 
 builder.Services.AddSingleton<SmtpClient>(options =>
 {
@@ -68,6 +81,14 @@ builder.Services.AddSingleton<SmtpClient>(options =>
 });
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, EmailSender>();
+
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
+builder.Services.AddScoped<IFinancialTransactionRepository, FinancialTransactionRepository>();
+
+#endregion
 
 var app = builder.Build();
 
@@ -96,5 +117,36 @@ app.MapRazorComponents<App>()
 
 // Add additional endpoints required by the Identity /Account Razor components.
 app.MapAdditionalIdentityEndpoints();
+
+#region Minimal APIs
+int pageSize = builder.Configuration.GetValue<int>("Pagination:PageSize");
+
+app.MapGet("/api/categories", async (ICategoryRepository repository, [FromQuery] int companyId, int pageIndex) =>
+{
+    var data = await repository.GetAll(companyId, pageIndex, pageSize);
+    return Results.Ok(data);
+});
+
+app.MapGet("/api/companies", async (ICompanyRepository repository, [FromQuery] Guid applicationUserId, [FromQuery] int pageIndex, [FromQuery] string searchWord) =>
+{
+    var data = await repository.GetAll(applicationUserId, pageIndex, pageSize, searchWord);
+    return Results.Ok(data);
+});
+
+app.MapGet("/api/accounts", async (IAccountRepository repository, [FromQuery] int companyId, [FromQuery] int pageIndex, [FromQuery] string searchWord) =>
+{
+    var data = await repository.GetAll(companyId, pageIndex, pageSize, searchWord);
+    return Results.Ok(data);
+});
+
+app.MapGet("/api/financialtransactions", async (IFinancialTransactionRepository repository, [FromQuery] TypeFinancialTransaction type, [FromQuery] int companyId, [FromQuery] int pageIndex, [FromQuery] string searchWord) =>
+{
+
+    var data = await repository.GetAll(companyId, type, pageIndex, pageSize, searchWord);
+    return Results.Ok(data);
+});
+
+
+#endregion
 
 app.Run();

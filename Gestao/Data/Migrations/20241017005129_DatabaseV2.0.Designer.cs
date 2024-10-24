@@ -4,6 +4,7 @@ using Gestao.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gestao.Migrations.Data
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241017005129_DatabaseV2.0")]
+    partial class DatabaseV20
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -122,15 +125,10 @@ namespace Gestao.Migrations.Data
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CompanyId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CompanyId");
 
                     b.ToTable("Categories");
                 });
@@ -186,7 +184,7 @@ namespace Gestao.Migrations.Data
                     b.ToTable("Companies");
                 });
 
-            modelBuilder.Entity("Gestao.Domain.Document", b =>
+            modelBuilder.Entity("Gestao.Domain.DocumentAttachment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -204,7 +202,7 @@ namespace Gestao.Migrations.Data
 
                     b.HasIndex("FinancialTransactionId");
 
-                    b.ToTable("Documents");
+                    b.ToTable("DocumentAttachments");
                 });
 
             modelBuilder.Entity("Gestao.Domain.FinancialTransaction", b =>
@@ -260,10 +258,6 @@ namespace Gestao.Migrations.Data
 
                     b.Property<int>("RepeatTimes")
                         .HasColumnType("int");
-
-                    b.Property<string>("TypeFinancialTransaction")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -418,15 +412,6 @@ namespace Gestao.Migrations.Data
                     b.Navigation("Company");
                 });
 
-            modelBuilder.Entity("Gestao.Domain.Category", b =>
-                {
-                    b.HasOne("Gestao.Domain.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId");
-
-                    b.Navigation("Company");
-                });
-
             modelBuilder.Entity("Gestao.Domain.Company", b =>
                 {
                     b.HasOne("Gestao.Data.ApplicationUser", "User")
@@ -436,10 +421,10 @@ namespace Gestao.Migrations.Data
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Gestao.Domain.Document", b =>
+            modelBuilder.Entity("Gestao.Domain.DocumentAttachment", b =>
                 {
                     b.HasOne("Gestao.Domain.FinancialTransaction", "FinancialTransaction")
-                        .WithMany("Documents")
+                        .WithMany("DocumentAttachments")
                         .HasForeignKey("FinancialTransactionId");
 
                     b.Navigation("FinancialTransaction");
@@ -519,7 +504,7 @@ namespace Gestao.Migrations.Data
 
             modelBuilder.Entity("Gestao.Domain.FinancialTransaction", b =>
                 {
-                    b.Navigation("Documents");
+                    b.Navigation("DocumentAttachments");
                 });
 #pragma warning restore 612, 618
         }
