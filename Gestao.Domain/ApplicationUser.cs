@@ -1,3 +1,4 @@
+using Gestao.Domain.Interfaces;
 using Microsoft.AspNetCore.Identity;
 
 namespace Gestao.Data
@@ -6,5 +7,4 @@ namespace Gestao.Data
     public class ApplicationUser : IdentityUser
     {
     }
-
 }

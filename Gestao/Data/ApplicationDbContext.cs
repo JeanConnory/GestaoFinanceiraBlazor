@@ -1,3 +1,4 @@
+using Gestao.Data.Interceptors;
 using Gestao.Domain;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,11 @@ namespace Gestao.Data
 
         public DbSet<Document> Documents { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.AddInterceptors(new SoftDeleteInterceptor());
+        }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -27,6 +33,30 @@ namespace Gestao.Data
             builder.Entity<FinancialTransaction>()
                 .Property(a => a.TypeFinancialTransaction)
                 .HasConversion<string>();
+
+            builder.Entity<Company>()
+                .HasIndex(a => a.TaxId)
+                .IsUnique();
+
+            builder.Entity<Account>()
+                .HasQueryFilter(a => a.DeleteAt == null);
+
+            builder.Entity<Company>()
+                .HasQueryFilter(a => a.DeleteAt == null);
+
+            builder.Entity<Category>()
+                .HasQueryFilter(a => a.DeleteAt == null);
+
+            builder.Entity<Document>()
+                .HasQueryFilter(a => a.DeleteAt == null);
+
+            builder.Entity<FinancialTransaction>()
+                .HasQueryFilter(a => a.DeleteAt == null);
+
+            //builder.Entity<Company>()
+            //    .HasMany(a => a.Accounts)
+            //    .WithOne(a => a.Company)
+            //    .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

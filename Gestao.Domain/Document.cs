@@ -1,6 +1,8 @@
-﻿namespace Gestao.Domain;
+﻿using Gestao.Domain.Interfaces;
 
-public class Document
+namespace Gestao.Domain;
+
+public class Document : ISoftDelete
 {
     public int Id { get; set; }
     public string Path { get; set; } = null!;
@@ -8,4 +10,7 @@ public class Document
     public int? FinancialTransactionId { get; set; }
     public FinancialTransaction FinancialTransaction { get; set; }
 
+    public DateTimeOffset CreatedAt { get; set; }
+
+    public DateTimeOffset? DeleteAt { get; set; }
 }

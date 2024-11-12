@@ -1,9 +1,12 @@
+using Blazored.LocalStorage;
+using Gestao.Client.Libraries.Notifications;
 using Gestao.Components;
 using Gestao.Components.Account;
 using Gestao.Data;
 using Gestao.Domain.Enums;
 using Gestao.Domain.Repositories;
 using Gestao.Libraries.Mail;
+using Gestao.Libraries.Services;
 using Gestao.Repositories;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -53,8 +56,10 @@ builder.Services.AddAuthentication(options =>
 #region Config of Database & Authentication
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -80,8 +85,11 @@ builder.Services.AddSingleton<SmtpClient>(options =>
     return smtp;
 });
 
-builder.Services.AddSingleton<IEmailSender<ApplicationUser>, EmailSender>();
+builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddScoped<CompanyOnSelectedNotification>();
 
+builder.Services.AddSingleton<IEmailSender<ApplicationUser>, EmailSender>();
+builder.Services.AddSingleton<ICepService, CepService>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();

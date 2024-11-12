@@ -104,6 +104,12 @@ namespace Gestao.Migrations.Data
                     b.Property<int?>("CompanyId")
                         .HasColumnType("int");
 
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("DeleteAt")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -125,6 +131,12 @@ namespace Gestao.Migrations.Data
                     b.Property<int?>("CompanyId")
                         .HasColumnType("int");
 
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("DeleteAt")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -144,33 +156,45 @@ namespace Gestao.Migrations.Data
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("City")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Complement")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<DateTimeOffset?>("DeleteAt")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<string>("LegalName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Neighborhood")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PostalCode")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("State")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TaxId")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("TradeName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserId")
@@ -180,6 +204,9 @@ namespace Gestao.Migrations.Data
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TaxId")
+                        .IsUnique();
 
                     b.HasIndex("UserId1");
 
@@ -193,6 +220,12 @@ namespace Gestao.Migrations.Data
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("DeleteAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int?>("FinancialTransactionId")
                         .HasColumnType("int");
@@ -231,6 +264,9 @@ namespace Gestao.Migrations.Data
                         .HasColumnType("int");
 
                     b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("DeleteAt")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Description")
@@ -412,7 +448,7 @@ namespace Gestao.Migrations.Data
             modelBuilder.Entity("Gestao.Domain.Account", b =>
                 {
                     b.HasOne("Gestao.Domain.Company", "Company")
-                        .WithMany()
+                        .WithMany("Accounts")
                         .HasForeignKey("CompanyId");
 
                     b.Navigation("Company");
@@ -421,7 +457,7 @@ namespace Gestao.Migrations.Data
             modelBuilder.Entity("Gestao.Domain.Category", b =>
                 {
                     b.HasOne("Gestao.Domain.Company", "Company")
-                        .WithMany()
+                        .WithMany("Categories")
                         .HasForeignKey("CompanyId");
 
                     b.Navigation("Company");
@@ -456,7 +492,7 @@ namespace Gestao.Migrations.Data
                         .HasForeignKey("CategoryId");
 
                     b.HasOne("Gestao.Domain.Company", "Company")
-                        .WithMany()
+                        .WithMany("FinancialTransactions")
                         .HasForeignKey("CompanyId");
 
                     b.Navigation("Account");
@@ -515,6 +551,15 @@ namespace Gestao.Migrations.Data
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Gestao.Domain.Company", b =>
+                {
+                    b.Navigation("Accounts");
+
+                    b.Navigation("Categories");
+
+                    b.Navigation("FinancialTransactions");
                 });
 
             modelBuilder.Entity("Gestao.Domain.FinancialTransaction", b =>

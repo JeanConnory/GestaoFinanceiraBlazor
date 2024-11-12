@@ -1,8 +1,11 @@
 using Gestao.Client;
 using Gestao.Client.Services;
 using Gestao.Domain.Repositories;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Blazored.LocalStorage;
+using Gestao.Client.Libraries.Notifications;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -22,9 +25,14 @@ builder.Services.AddScoped<HttpClient>(options =>
     return httpClient;
 });
 
+builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddScoped<CompanyOnSelectedNotification>();
+
 builder.Services.AddScoped<IAccountRepository, AccountService>();
 builder.Services.AddScoped<ICategoryRepository, CategoryService>();
 builder.Services.AddScoped<ICompanyRepository, CompanyService>();
 builder.Services.AddScoped<IFinancialTransactionRepository, FinancialTransactionService>();
+
+builder.RootComponents.Add<HeadOutlet>("head::after");
 
 await builder.Build().RunAsync();

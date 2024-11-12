@@ -3,9 +3,15 @@
 @attribute [Authorize]
 @rendermode InteractiveAuto
 
-@inject ICompanyRepository repository
-@inject AuthenticationStateProvider provider
-@inject IConfiguration configuration
+@inject ICompanyRepository CompanyRepository
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IConfiguration Configuration
+@inject ILocalStorageService LocalStorage
+@inject CompanyOnSelectedNotification Notification
+
+<PageTitle>
+    Empresa - Lista
+</PageTitle>
 
 <div class="card">
     <div class="card-header align-items-center d-flex">
@@ -53,22 +59,22 @@
                     }
                     else
                     {
-                        @foreach (var itens in Paginated.Items)
+                        @foreach (var item in Paginated.Items)
                         {
                             <tr>
                                 <td>
-                                    @itens.TradeName
+                                    @item.TradeName
                                 </td>
                                 <td>
-                                    @itens.TaxId
+                                    @item.TaxId
                                 </td>
                                 <td>
-                                    @itens.Address
+                                    @item.Address
                                 </td>
                                 <td>
-                                    <a href="#" class="btn btn-sm btn-soft-success"><i class="ri-arrow-right-line me-1"></i>Selecionar</a>
-                                    <a href="#" class="btn btn-sm btn-soft-info"><i class="ri-edit-line"></i></a>
-                                    <a href="#" class="btn btn-sm btn-soft-danger"><i class="ri-delete-bin-line"></i></a>
+                                    <a href="#" class="btn btn-sm btn-soft-success" @onclick="() => SelectCompany(item)"><i class="ri-arrow-right-line me-1"></i>Selecionar</a>
+                                    <a href="/Company/Edit/@item.Id" class="btn btn-sm btn-soft-info"><i class="ri-edit-line"></i></a>
+                                    <a href="/Company/Detail/@item.Id" class="btn btn-sm btn-soft-danger"><i class="ri-delete-bin-line"></i></a>
                                 </td>
                             </tr>
                         }
@@ -90,8 +96,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        PageSize = configuration.GetValue<int>("Pagination:PageSize");
-        await GetAuthenticationUserId();
+        PageSize = Configuration.GetValue<int>("Pagination:PageSize");
+        ApplicationUserId = (await AuthenticationHelper.GetAuthenticationUserIdAsync(AuthenticationStateProvider)).Value;
         await LoadDataAsync();        
     }
 
@@ -109,15 +115,13 @@
 
     private async Task LoadDataAsync()
     {
-        Paginated = await repository.GetAll(ApplicationUserId, PageIndex, PageSize, SearchWord);
+        Paginated = await CompanyRepository.GetAll(ApplicationUserId, PageIndex, PageSize, SearchWord);
     }
 
-    private async Task GetAuthenticationUserId()
+    private async Task SelectCompany(Company company)
     {
-        var authenticationState = await provider.GetAuthenticationStateAsync();
-        var userId = authenticationState.User.Claims.FirstOrDefault(a => a.Type == ClaimTypes.NameIdentifier);
-        
-        if(userId != null)
-            Guid.TryParse(userId.Value, out ApplicationUserId);
+        await LocalStorage.SetItemAsync(AppConstants.LocalStorageCompany, company);
+
+        Notification.NotificationOnSelected();
     }
 }
