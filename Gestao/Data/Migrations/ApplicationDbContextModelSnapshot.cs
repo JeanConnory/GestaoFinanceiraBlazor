@@ -87,6 +87,231 @@ namespace Gestao.Migrations.Data
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Gestao.Domain.Account", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTimeOffset>("BalanceDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("DeleteAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("Accounts");
+                });
+
+            modelBuilder.Entity("Gestao.Domain.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("DeleteAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("Gestao.Domain.Company", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Complement")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("DeleteAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("LegalName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Neighborhood")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TaxId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("TradeName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UserId1")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TaxId")
+                        .IsUnique();
+
+                    b.HasIndex("UserId1");
+
+                    b.ToTable("Companies");
+                });
+
+            modelBuilder.Entity("Gestao.Domain.Document", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("DeleteAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int?>("FinancialTransactionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Path")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FinancialTransactionId");
+
+                    b.ToTable("Documents");
+                });
+
+            modelBuilder.Entity("Gestao.Domain.FinancialTransaction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("AccountId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("AmountPay")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("DeleteAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Discounts")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTimeOffset>("DueDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<decimal>("InterestPenalty")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Observation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("PaymentDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset>("ReferenceDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Repeat")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RepeatTimes")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TypeFinancialTransaction")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("FinancialTransactions");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -220,6 +445,63 @@ namespace Gestao.Migrations.Data
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Gestao.Domain.Account", b =>
+                {
+                    b.HasOne("Gestao.Domain.Company", "Company")
+                        .WithMany("Accounts")
+                        .HasForeignKey("CompanyId");
+
+                    b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("Gestao.Domain.Category", b =>
+                {
+                    b.HasOne("Gestao.Domain.Company", "Company")
+                        .WithMany("Categories")
+                        .HasForeignKey("CompanyId");
+
+                    b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("Gestao.Domain.Company", b =>
+                {
+                    b.HasOne("Gestao.Data.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId1");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Gestao.Domain.Document", b =>
+                {
+                    b.HasOne("Gestao.Domain.FinancialTransaction", "FinancialTransaction")
+                        .WithMany("Documents")
+                        .HasForeignKey("FinancialTransactionId");
+
+                    b.Navigation("FinancialTransaction");
+                });
+
+            modelBuilder.Entity("Gestao.Domain.FinancialTransaction", b =>
+                {
+                    b.HasOne("Gestao.Domain.Account", "Account")
+                        .WithMany()
+                        .HasForeignKey("AccountId");
+
+                    b.HasOne("Gestao.Domain.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId");
+
+                    b.HasOne("Gestao.Domain.Company", "Company")
+                        .WithMany("FinancialTransactions")
+                        .HasForeignKey("CompanyId");
+
+                    b.Navigation("Account");
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Company");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -269,6 +551,20 @@ namespace Gestao.Migrations.Data
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Gestao.Domain.Company", b =>
+                {
+                    b.Navigation("Accounts");
+
+                    b.Navigation("Categories");
+
+                    b.Navigation("FinancialTransactions");
+                });
+
+            modelBuilder.Entity("Gestao.Domain.FinancialTransaction", b =>
+                {
+                    b.Navigation("Documents");
                 });
 #pragma warning restore 612, 618
         }

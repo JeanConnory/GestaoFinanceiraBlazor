@@ -1,7 +1,6 @@
 ﻿@page "/Account/Login"
 
 @layout Gestao.Components.Layout.Default.DefaultLayout
-
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Identity
@@ -13,9 +12,10 @@
 @inject IdentityRedirectManager RedirectManager
 
 <PageTitle>Acessar</PageTitle>
+
 <div class="p-lg-5 p-4">
     <div>
-        <h5 class="text-primary">Bem-vindo !</h5>
+        <h5 class="text-primary">Bem-vindo!</h5>
         <p class="text-muted">Acesse o sistema.</p>
     </div>
 
@@ -24,10 +24,9 @@
         <EditForm Model="Input" method="post" OnValidSubmit="LoginUser" FormName="login">
             <DataAnnotationsValidator />
             <ValidationSummary class="text-danger" role="alert" />
-
             <div class="mb-3">
                 <label for="email" class="form-label">E-mail</label>
-                <InputText id="email" @bind-Value="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="Digite seu e-mail" />
+                <InputText @bind-Value="Input.Email" id="email" class="form-control" autocomplete="username" aria-required="true" placeholder="Digite seu e-mail" />
                 <ValidationMessage For="() => Input.Email" class="invalid-feedback" />
             </div>
 
@@ -35,9 +34,9 @@
                 <div class="float-end">
                     <a href="Account/ForgotPassword" class="text-muted">Esqueceu a senha?</a>
                 </div>
-                <label class="form-label" for="password">Password</label>
+                <label class="form-label" for="password">Senha</label>
                 <div class="position-relative auth-pass-inputgroup mb-3">
-                    <InputText id="password" type="password" @bind-Value="Input.Password" class="form-control pe-5 password-input" autocomplete="current-password" aria-required="true" placeholder="Digite sua senha" />
+                    <InputText type="password" id="password" @bind-Value="Input.Password" class="form-control pe-5 password-input" autocomplete="current-password" aria-required="true" placeholder="Digite sua senha" />
                     <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon material-shadow-none" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
                 </div>
                 <ValidationMessage For="() => Input.Password" class="invalid-feedback" />
@@ -45,7 +44,7 @@
 
             <div class="form-check">
                 <InputCheckbox @bind-Value="Input.RememberMe" class="darker-border-checkbox form-check-input" id="auth-remember-check" />
-                <label class="form-check-label" for="auth-remember-check">Lembrar-me</label>
+                <label class="form-check-label" for="auth-remember-check">Lembrar-me?</label>
             </div>
 
             <div class="mt-4">
@@ -53,18 +52,24 @@
             </div>
         </EditForm>
         <div class="mt-4 text-center">
+
+            
             <div class="signin-other-title">
-                <h5 class="fs-13 mb-4 title">Acessar com</h5>
-            </div>            
+                <h5 class="fs-13 mb-4 title">Acessar com </h5>
+            </div>
+
+            
             <ExternalLoginPicker />
         </div>
     </div>
+
     <div class="mt-5 text-center">
-        <p class="mb-0">Não tem uma conta? <a href="@(NavigationManager.GetUriWithQueryParameters("Account/Register", new Dictionary<string, object?> { ["ReturnUrl"] = ReturnUrl }))">Cadastre-se</a> </p>
+        <p class="mb-0">Não tem uma conta? <a href="@(NavigationManager.GetUriWithQueryParameters("Account/Register", new Dictionary<string, object?> { ["ReturnUrl"] = ReturnUrl }))">Cadastra-se</a> </p>
         <br />
         <p><a href="Account/ResendEmailConfirmation">Reenviar e-mail de confirmação</a></p>
     </div>
 </div>
+
 
 @code {
     private string? errorMessage;
@@ -100,8 +105,8 @@
         else if (result.RequiresTwoFactor)
         {
             RedirectManager.RedirectTo(
-            "Account/LoginWith2fa",
-            new() { ["returnUrl"] = ReturnUrl, ["rememberMe"] = Input.RememberMe });
+                "Account/LoginWith2fa",
+                new() { ["returnUrl"] = ReturnUrl, ["rememberMe"] = Input.RememberMe });
         }
         else if (result.IsLockedOut)
         {
