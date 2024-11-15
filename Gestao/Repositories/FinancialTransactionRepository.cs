@@ -40,6 +40,8 @@ namespace Gestao.Repositories
             return await _db.FinancialTransactions
                 .OrderByDescending(a => a.ReferenceDate)
                 .Include(a => a.Documents)
+                .Include(c => c.Category)
+                .Include(a => a.Account)
                 .SingleOrDefaultAsync(a => a.Id == id);
         }
 

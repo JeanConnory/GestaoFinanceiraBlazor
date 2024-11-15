@@ -7,6 +7,8 @@ public class Document : ISoftDelete
     public int Id { get; set; }
     public string Path { get; set; } = null!;
 
+    public string Name { get; set; }
+
     public int? FinancialTransactionId { get; set; }
     public FinancialTransaction FinancialTransaction { get; set; }
 
