@@ -25,6 +25,11 @@ namespace Gestao.Client.Services
             throw new NotImplementedException();
         }
 
+        public Task Delete(FinancialTransaction entity)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<FinancialTransaction> Get(int id)
         {
             throw new NotImplementedException();
@@ -35,6 +40,16 @@ namespace Gestao.Client.Services
             var url = $"/api/financialTransactions?companyId={companyId}&pageIndex={pageIndex}&searchWord={searchWord}&Type={type}";
             var entities = await _httpClient.GetFromJsonAsync<PaginatedList<FinancialTransaction>>(url);
             return entities!;
+        }
+
+        public Task<int> GetCountTransacationsSameGroup(int Id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<FinancialTransaction>> GetTransacationsSameGroup(int Id)
+        {
+            throw new NotImplementedException();
         }
 
         public Task Update(FinancialTransaction entity)
