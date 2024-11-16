@@ -7,6 +7,7 @@
 
 @inject ICepService CepService
 @inject ICompanyRepository CompanyRepository
+@inject ApplicationDbContext db
 
 <PageTitle>
     Empresa - Atualizar
@@ -101,7 +102,7 @@
                     </div>
                     <div class="row mt-3">
                         <div class="d-flex justify-content-between">
-                            <a href="/Company/List" class="btn btn-light">Voltar</a>
+                            <a href="/Company/List" class="btn btn-light" @onclick="BackRollback">Voltar</a>
                             <button type="submit" class="btn btn-primary">Salvar</button>
                         </div>
                     </div>
@@ -179,5 +180,10 @@
             Company.Address = address.Logradouro;
             Loading = false;
         }
+    }
+
+    private void BackRollback()
+    {
+        db.ChangeTracker.Clear();
     }
 }

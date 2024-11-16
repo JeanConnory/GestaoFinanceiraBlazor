@@ -26,6 +26,8 @@ public class FinancialTransaction : ISoftDelete
     [RequiredIfAmountPaidFilled]
     public decimal? Amount { get; set; }
 
+    public int? RepeatGroup { get; set; }
+
     public Recurrence Repeat { get; set; }
 
     [Range(1, 10000, ErrorMessage = "O campo 'Repetir' deve ter entre {1} e {2}")]

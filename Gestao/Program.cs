@@ -1,4 +1,5 @@
 using Blazored.LocalStorage;
+using Coravel;
 using Gestao.Client.Libraries.Notifications;
 using Gestao.Components;
 using Gestao.Components.Account;
@@ -6,6 +7,7 @@ using Gestao.Data;
 using Gestao.Domain.Enums;
 using Gestao.Domain.Repositories;
 using Gestao.Libraries.Mail;
+using Gestao.Libraries.Queues;
 using Gestao.Libraries.Services;
 using Gestao.Repositories;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -57,7 +59,7 @@ builder.Services.AddAuthentication(options =>
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
+builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -69,7 +71,7 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
 
 #endregion
 
-#region Dependency Injection
+#region Dependency Injection (Repositories, Extra Library: Local Storage, Queuing, Email)
 
 builder.Services.AddSingleton<SmtpClient>(options =>
 {
@@ -84,6 +86,9 @@ builder.Services.AddSingleton<SmtpClient>(options =>
         );
     return smtp;
 });
+
+builder.Services.AddQueue();
+builder.Services.AddScoped<FinancialTransactionRepeatInvocable>();
 
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddScoped<CompanyOnSelectedNotification>();
