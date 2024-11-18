@@ -23,4 +23,6 @@ public class Account : ISoftDelete
     public DateTimeOffset CreatedAt { get; set; }
 
     public DateTimeOffset? DeleteAt { get; set; }
+
+    public ICollection<FinancialTransaction> FinancialTransactions { get; set; }
 }
