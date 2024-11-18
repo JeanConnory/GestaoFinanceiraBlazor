@@ -4,9 +4,25 @@
 
 @attribute [Authorize]
 @rendermode InteractiveServer
+@inherits PageBase
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Painel</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="row">
+    <Totalizadores />
+    <AccountBalance />
+</div>
 
-Welcome to your new app.
+<AccessLink />
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if(firstRender)
+        {
+            var company = await LocalStorage.GetItemAsync<Domain.Company>(AppConstants.LocalStorageCompany);
+            if (company is null)
+                NavigationManager.NavigateTo("/Company/List");
+        }
+    }
+}
